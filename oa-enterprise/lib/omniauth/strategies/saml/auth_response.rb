@@ -17,7 +17,7 @@ module OmniAuth
           self.response = response
           self.document = OmniAuth::Strategies::SAML::XMLSecurity::SignedDocument.new(Base64.decode64(response))
 
-          logger.info "[OMNIAUTH] document is #{self.document}"
+          Rails.logger.info "[OMNIAUTH] document is #{self.document}"
         end
 
         def is_valid?
@@ -88,9 +88,9 @@ module OmniAuth
         end
 
         def validate_response_state(soft = true)
-          logger.info "[OMNIAUTH] validate_response_state phase"
-          logger.info "[OMNIAUTH] response.empty? =  #{response.empty?}"
-          logger.info "[OMNIAUTH] settings.nil? =  #{settings.nil?}"
+          Rails.logger.info "[OMNIAUTH] validate_response_state phase"
+          Rails.logger.info "[OMNIAUTH] response.empty? =  #{response.empty?}"
+          Rails.logger.info "[OMNIAUTH] settings.nil? =  #{settings.nil?}"
 
           if response.empty?
             return soft ? false : validation_error("Blank response")
