@@ -4,7 +4,7 @@ module OmniAuth
   module Strategies
     class SAML
       class AuthResponse
-        
+
         ASSERTION = "urn:oasis:names:tc:SAML:2.0:assertion"
         PROTOCOL  = "urn:oasis:names:tc:SAML:2.0:protocol"
         DSIG      = "http://www.w3.org/2000/09/xmldsig#"
@@ -16,6 +16,8 @@ module OmniAuth
           self.options  = options
           self.response = response
           self.document = OmniAuth::Strategies::SAML::XMLSecurity::SignedDocument.new(Base64.decode64(response))
+
+          logger.info "[OMNIAUTH] document is #{self.document}"
         end
 
         def is_valid?
@@ -86,6 +88,10 @@ module OmniAuth
         end
 
         def validate_response_state(soft = true)
+          logger.info "[OMNIAUTH] validate_response_state phase"
+          logger.info "[OMNIAUTH] response.empty? =  #{response.empty?}"
+          logger.info "[OMNIAUTH] settings.nil? =  #{settings.nil?}"
+
           if response.empty?
             return soft ? false : validation_error("Blank response")
           end
@@ -134,7 +140,7 @@ module OmniAuth
             Time.parse(node.attributes[attribute])
           end
         end
-        
+
       end
     end
   end

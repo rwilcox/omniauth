@@ -29,13 +29,16 @@ module OmniAuth
 
       def callback_phase
         begin
+          logger.info "[OMNIAUTH] Callback phase"
           response = OmniAuth::Strategies::SAML::AuthResponse.new(request.params['SAMLResponse'])
           response.settings = @@settings
           @name_id  = response.name_id
           @extra_attributes = response.attributes
+          logger.info "[OMNIAUTH] name = #{@name}"
           return fail!(:invalid_ticket, 'Invalid SAML Ticket') if @name_id.nil? || @name_id.empty?
           super
         rescue ArgumentError => e
+          logger.info "[OMNIAUTH] Invalid SAML Response"
           fail!(:invalid_ticket, 'Invalid SAML Response')
         end
       end
