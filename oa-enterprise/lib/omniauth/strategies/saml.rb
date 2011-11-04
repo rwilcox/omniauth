@@ -30,6 +30,7 @@ module OmniAuth
       def callback_phase
         begin
           Rails.logger.info "[OMNIAUTH] Callback phase"
+          Rails.logger.info "With params: #{request.params.inspect}"
           response = OmniAuth::Strategies::SAML::AuthResponse.new(request.params['SAMLResponse'])
           response.settings = @@settings
           @name_id  = response.name_id
@@ -39,6 +40,8 @@ module OmniAuth
           super
         rescue ArgumentError => e
           Rails.logger.info "[OMNIAUTH] Invalid SAML Response"
+          Rails.logger.info "[OMNIAUTH] Error reported was: #{e.message}"
+          Rails.logger.info "[OMNIAUTH] Error backtrace was: #{ e.backtrace.join('\n') }"
           fail!(:invalid_ticket, 'Invalid SAML Response')
         end
       end
