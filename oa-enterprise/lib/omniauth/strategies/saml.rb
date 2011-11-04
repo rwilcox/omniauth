@@ -30,7 +30,7 @@ module OmniAuth
       def callback_phase
         begin
           Rails.logger.info "[OMNIAUTH] Callback phase"
-          Rails.logger.info "With params: #{request.params.inspect}"
+          Rails.logger.info "[OMNIAUTH] With params: #{request.params.inspect}"
           response = OmniAuth::Strategies::SAML::AuthResponse.new(request.params['SAMLResponse'])
           response.settings = @@settings
           @name_id  = response.name_id
